@@ -3,251 +3,108 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KODIKA</title>
+<title>GitHub Editor</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #ffffff;
-  --sidebar: #f6f6f6;
-  --border: #d4d4d4;
-  --border-light: #ebebeb;
-  --text: #111;
-  --muted: #888;
-  --hover: #ececec;
-  --active: #e0e0e0;
-  --mono: 'JetBrains Mono', monospace;
+  --bg: #fff; --sidebar: #f6f6f6; --border: #d4d4d4; --border-light: #ebebeb;
+  --text: #111; --muted: #888; --hover: #ececec; --active: #e0e0e0;
+  --danger: #c0392b; --mono: 'JetBrains Mono', monospace;
 }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--mono);
-  font-size: 13px;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 13px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
 /* HEADER */
-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 7px 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.logo { font-weight: 600; font-size: 13px; }
+header { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.logo { font-weight: 600; }
 header .spacer { flex: 1; }
-.token-btn {
-  font-family: var(--mono);
-  font-size: 11px;
-  padding: 3px 8px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: var(--sidebar);
-  cursor: pointer;
-  color: var(--muted);
-}
-.token-btn:hover { background: var(--hover); color: var(--text); }
+.hbtn { font-family: var(--mono); font-size: 11px; padding: 3px 8px; border: 1px solid var(--border); border-radius: 3px; background: var(--sidebar); cursor: pointer; color: var(--muted); }
+.hbtn:hover { background: var(--hover); color: var(--text); }
 
 /* LAYOUT */
 .app { display: flex; flex: 1; min-height: 0; }
 
 /* SIDEBAR */
-aside {
-  width: 230px;
-  flex-shrink: 0;
-  border-right: 1px solid var(--border);
-  background: var(--sidebar);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.sidebar-top {
-  padding: 10px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field-label {
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  margin-bottom: 3px;
-}
-
-select, input, textarea {
-  width: 100%;
-  font-family: var(--mono);
-  font-size: 12px;
-  padding: 5px 7px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  background: var(--bg);
-  color: var(--text);
-  outline: none;
-}
+aside { width: 240px; flex-shrink: 0; border-right: 1px solid var(--border); background: var(--sidebar); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar-top { padding: 10px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+.field-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; }
+select, input { width: 100%; font-family: var(--mono); font-size: 12px; padding: 5px 7px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg); color: var(--text); outline: none; }
 select:focus, input:focus { border-color: #999; }
 select:disabled { opacity: 0.5; }
-
 .btn-row { display: flex; gap: 6px; }
-
-button {
-  font-family: var(--mono);
-  font-size: 12px;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  cursor: pointer;
-  background: var(--bg);
-  color: var(--text);
-}
+button { font-family: var(--mono); font-size: 12px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 3px; cursor: pointer; background: var(--bg); color: var(--text); }
 button:hover:not(:disabled) { background: var(--hover); }
 button:disabled { opacity: 0.4; cursor: not-allowed; }
 button.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
 button.primary:hover:not(:disabled) { background: #333; }
+button.danger { color: var(--danger); border-color: #e8a09a; }
+button.danger:hover:not(:disabled) { background: #fdf0ef; }
+
+/* TREE HEADER */
+.tree-header { padding: 5px 10px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; border-bottom: 1px solid var(--border-light); display: flex; justify-content: space-between; align-items: center; }
+.tree-actions { display: flex; gap: 4px; }
+.tree-icon-btn { background: none; border: none; padding: 2px 5px; cursor: pointer; font-size: 13px; color: var(--muted); border-radius: 3px; }
+.tree-icon-btn:hover { background: var(--hover); color: var(--text); }
 
 /* FILE TREE */
-.tree-header {
-  padding: 6px 10px;
-  font-size: 10px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  border-bottom: 1px solid var(--border-light);
-  display: flex;
-  justify-content: space-between;
-}
-
 .file-tree { flex: 1; overflow-y: auto; padding: 3px 0; }
-
-.tree-node { }
-
-.tree-row {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 10px;
-  cursor: pointer;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-}
+.tree-row { display: flex; align-items: center; gap: 4px; padding: 3px 6px 3px 10px; cursor: pointer; white-space: nowrap; overflow: hidden; position: relative; }
 .tree-row:hover { background: var(--hover); }
+.tree-row:hover .row-actions { opacity: 1; }
 .tree-row.active { background: var(--active); font-weight: 600; }
-
-.tree-row .arrow {
-  width: 10px;
-  font-size: 8px;
-  color: var(--muted);
-  flex-shrink: 0;
-  display: inline-block;
-  transition: transform 0.12s;
-}
+.tree-row .arrow { width: 10px; font-size: 8px; color: var(--muted); flex-shrink: 0; display: inline-block; transition: transform 0.12s; }
 .tree-row.open > .arrow { transform: rotate(90deg); }
-
-.tree-row .name {
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.tree-row .name { font-size: 12px; overflow: hidden; text-overflow: ellipsis; flex: 1; }
 .tree-row.file .name { color: #444; }
-
+.row-actions { display: flex; gap: 2px; opacity: 0; flex-shrink: 0; }
+.row-act-btn { background: none; border: none; padding: 1px 4px; cursor: pointer; font-size: 11px; border-radius: 2px; color: var(--muted); }
+.row-act-btn:hover { background: var(--active); color: var(--text); }
+.row-act-btn.del:hover { color: var(--danger); }
 .tree-children { display: none; }
 .tree-children.open { display: block; }
-
 .tree-empty { padding: 10px; color: var(--muted); font-size: 11px; }
 
-.sidebar-bottom {
-  padding: 7px 10px;
-  border-top: 1px solid var(--border-light);
-}
-.sidebar-bottom button { width: 100%; font-size: 11px; }
+/* UPLOAD DROP ZONE */
+.drop-hint { padding: 6px 10px; font-size: 10px; color: var(--muted); border-top: 1px solid var(--border-light); text-align: center; cursor: pointer; }
+.drop-hint:hover { background: var(--hover); color: var(--text); }
+.drop-hint.dragover { background: var(--active); }
 
 /* MAIN */
 main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
-
-.editor-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  border-bottom: 1px solid var(--border);
-  background: var(--sidebar);
-  flex-shrink: 0;
-}
+.editor-bar { display: flex; align-items: center; gap: 8px; padding: 5px 12px; border-bottom: 1px solid var(--border); background: var(--sidebar); flex-shrink: 0; }
 .file-path { flex: 1; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .file-path.active { color: var(--text); }
-
 .editor-wrap { flex: 1; overflow: hidden; position: relative; }
-
-.welcome {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--muted); font-size: 12px;
-}
-
-#editor {
-  display: none;
-  width: 100%; height: 100%;
-  resize: none;
-  font-family: var(--mono);
-  font-size: 13px;
-  line-height: 1.65;
-  border: none;
-  padding: 14px 18px;
-  background: var(--bg);
-  color: var(--text);
-  outline: none;
-  tab-size: 2;
-}
+.welcome { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); font-size: 12px; gap: 8px; }
+.welcome-hint { font-size: 11px; }
+#editor { display: none; width: 100%; height: 100%; resize: none; font-family: var(--mono); font-size: 13px; line-height: 1.65; border: none; padding: 14px 18px; background: var(--bg); color: var(--text); outline: none; tab-size: 2; }
 
 /* COMMIT BAR */
-.commit-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
-  border-top: 1px solid var(--border);
-  background: var(--sidebar);
-  flex-shrink: 0;
-}
+.commit-bar { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-top: 1px solid var(--border); background: var(--sidebar); flex-shrink: 0; }
 .commit-bar input { flex: 1; font-size: 12px; }
 
 /* TOAST */
-#toast {
-  position: fixed; bottom: 14px; right: 14px;
-  background: var(--text); color: var(--bg);
-  font-size: 12px; padding: 7px 13px;
-  border-radius: 4px;
-  opacity: 0; transform: translateY(5px);
-  transition: all 0.18s; z-index: 999; pointer-events: none;
-}
+#toast { position: fixed; bottom: 14px; right: 14px; background: var(--text); color: var(--bg); font-size: 12px; padding: 7px 13px; border-radius: 4px; opacity: 0; transform: translateY(5px); transition: all 0.18s; z-index: 999; pointer-events: none; max-width: 300px; }
 #toast.show { opacity: 1; transform: translateY(0); }
 #toast.err { background: #444; }
 
 /* MODAL */
-.modal-bg {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.25); z-index: 200;
-  align-items: center; justify-content: center;
-}
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.25); z-index: 200; align-items: center; justify-content: center; }
 .modal-bg.open { display: flex; }
-.modal {
-  background: var(--bg); border: 1px solid var(--border);
-  border-radius: 5px; padding: 18px; width: 360px; max-width: 95vw;
-}
+.modal { background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 18px; width: 380px; max-width: 95vw; }
 .modal h3 { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
 .modal p { font-size: 11px; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
 .modal .btn-row { margin-top: 10px; justify-content: flex-end; }
+.modal label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 4px; }
+
+/* CONTEXT MENU */
+#ctxMenu { display: none; position: fixed; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 500; min-width: 160px; padding: 4px 0; }
+#ctxMenu.open { display: block; }
+.ctx-item { padding: 6px 14px; font-size: 12px; cursor: pointer; color: var(--text); }
+.ctx-item:hover { background: var(--hover); }
+.ctx-item.danger { color: var(--danger); }
+.ctx-item.danger:hover { background: #fdf0ef; }
+.ctx-sep { height: 1px; background: var(--border-light); margin: 3px 0; }
 
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -256,9 +113,9 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 <body>
 
 <header>
-  <div class="logo">kodika</div>
+  <div class="logo">github editor</div>
   <div class="spacer"></div>
-  <button class="token-btn" id="tokenBtn" onclick="openModal('tokenModal')">set token</button>
+  <button class="hbtn" id="tokenBtn" onclick="openModal('tokenModal')">set token</button>
 </header>
 
 <div class="app">
@@ -266,15 +123,11 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
     <div class="sidebar-top">
       <div>
         <div class="field-label">Repository</div>
-        <select id="repoSelect" onchange="onRepoChange()">
-          <option value="">— select repo —</option>
-        </select>
+        <select id="repoSelect" onchange="onRepoChange()"><option value="">— select repo —</option></select>
       </div>
       <div>
         <div class="field-label">Branch</div>
-        <select id="branchSelect" onchange="onBranchChange()" disabled>
-          <option value="">—</option>
-        </select>
+        <select id="branchSelect" onchange="onBranchChange()" disabled><option value="">—</option></select>
       </div>
       <div class="btn-row">
         <button onclick="fetchRepos()" style="flex:1">fetch repos</button>
@@ -283,26 +136,33 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
     </div>
 
     <div class="tree-header">
-      <span>files</span>
-      <span id="fileCount"></span>
+      <span>files <span id="fileCount" style="color:var(--muted)"></span></span>
+      <div class="tree-actions">
+        <button class="tree-icon-btn" title="New file" onclick="openNewItem('file')">+ file</button>
+        <button class="tree-icon-btn" title="New folder" onclick="openNewItem('folder')">+ folder</button>
+        <button class="tree-icon-btn" title="Upload file" onclick="triggerUpload()">↑ upload</button>
+      </div>
     </div>
 
     <div class="file-tree" id="fileTree">
       <div class="tree-empty">load a repo to browse files</div>
     </div>
 
-    <div class="sidebar-bottom">
-      <button onclick="openModal('newFileModal')">+ new file</button>
-    </div>
+    <div class="drop-hint" id="dropHint" onclick="triggerUpload()">drop files here to upload</div>
+    <input type="file" id="fileUpload" multiple style="display:none" onchange="handleUpload(this.files)" />
   </aside>
 
   <main>
     <div class="editor-bar">
       <div class="file-path" id="filePath">no file open</div>
       <button onclick="loadFile(currentPath)" id="btnReload" disabled style="font-size:11px">reload</button>
+      <button class="danger" onclick="confirmDelete()" id="btnDelete" disabled style="font-size:11px">delete</button>
     </div>
     <div class="editor-wrap">
-      <div class="welcome" id="welcome">open a file to start editing</div>
+      <div class="welcome" id="welcome">
+        <div>open a file to start editing</div>
+        <div class="welcome-hint">right-click files for more options</div>
+      </div>
       <textarea id="editor" spellcheck="false"></textarea>
     </div>
     <div class="commit-bar">
@@ -316,7 +176,7 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
 <div class="modal-bg" id="tokenModal">
   <div class="modal">
     <h3>GitHub Token</h3>
-    <p>Go to github.com → Settings → Developer settings → Personal access tokens → Generate new token. Give it <strong>repo</strong> scope. Only stored in memory for this tab.</p>
+    <p>Go to github.com → Settings → Developer settings → Personal access tokens → Generate new token. Give it <strong>repo</strong> scope. Stored in memory only.</p>
     <input type="password" id="tokenInput" placeholder="ghp_…" />
     <div class="btn-row">
       <button onclick="closeModal('tokenModal')">cancel</button>
@@ -325,28 +185,66 @@ main { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: h
   </div>
 </div>
 
-<!-- New File Modal -->
-<div class="modal-bg" id="newFileModal">
+<!-- New Item Modal -->
+<div class="modal-bg" id="newItemModal">
   <div class="modal">
-    <h3>New File</h3>
-    <p>Enter path from repo root, e.g. <code>src/hello.js</code></p>
-    <input id="newFilePath" placeholder="path/to/file.txt" />
+    <h3 id="newItemTitle">New File</h3>
+    <p id="newItemDesc">Enter path from repo root, e.g. <code>src/hello.js</code></p>
+    <label id="newItemLabel">Path</label>
+    <input id="newItemPath" placeholder="path/to/file.txt" />
     <div class="btn-row">
-      <button onclick="closeModal('newFileModal')">cancel</button>
-      <button class="primary" onclick="createNewFile()">create</button>
+      <button onclick="closeModal('newItemModal')">cancel</button>
+      <button class="primary" onclick="createItem()">create</button>
     </div>
   </div>
+</div>
+
+<!-- Delete Confirm Modal -->
+<div class="modal-bg" id="deleteModal">
+  <div class="modal">
+    <h3>Delete file?</h3>
+    <p id="deleteDesc">This will permanently delete <strong id="deleteFileName"></strong> from GitHub. This cannot be undone.</p>
+    <div class="btn-row">
+      <button onclick="closeModal('deleteModal')">cancel</button>
+      <button class="danger" onclick="deleteFile()">delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Path Modal -->
+<div class="modal-bg" id="uploadModal">
+  <div class="modal">
+    <h3>Upload Files</h3>
+    <p>Choose a folder path to upload into (leave blank for root).</p>
+    <label>Upload folder path (optional)</label>
+    <input id="uploadPath" placeholder="e.g. src/assets" />
+    <label style="margin-top:8px">Commit message</label>
+    <input id="uploadMsg" placeholder="Add files" style="margin-top:4px" />
+    <div class="btn-row">
+      <button onclick="closeModal('uploadModal')">cancel</button>
+      <button class="primary" onclick="doUpload()">upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- Context Menu -->
+<div id="ctxMenu">
+  <div class="ctx-item" id="ctxOpen">open</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctxRename">rename</div>
+  <div class="ctx-item danger" id="ctxDelete">delete</div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-let token = '';
-let repo = '';
-let branch = '';
-let currentPath = '';
-let currentSha = '';
+let token = '', repo = '', branch = '', currentPath = '', currentSha = '';
+let pendingUploadFiles = null;
+let ctxTarget = null; // { path, sha, isDir }
+let newItemType = 'file';
+let allFiles = []; // flat list of all file objects
 
+// ── MODALS ──
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
@@ -357,14 +255,16 @@ function saveToken() {
   if (token) { toast('token saved'); fetchRepos(); }
 }
 
-async function api(url) {
-  const h = { 'Accept': 'application/vnd.github+json' };
+// ── API ──
+async function api(url, opts = {}) {
+  const h = { 'Accept': 'application/vnd.github+json', ...(opts.headers || {}) };
   if (token) h['Authorization'] = `Bearer ${token}`;
-  const r = await fetch(url, { headers: h });
+  const r = await fetch(url, { ...opts, headers: h });
   if (!r.ok) { const e = await r.json().catch(() => {}); throw new Error((e && e.message) || r.status); }
-  return r.json();
+  return opts.raw ? r : r.json();
 }
 
+// ── REPOS & BRANCHES ──
 async function fetchRepos() {
   if (!token) { openModal('tokenModal'); return; }
   toast('fetching repos…');
@@ -372,42 +272,28 @@ async function fetchRepos() {
     const repos = await api('https://api.github.com/user/repos?per_page=100&sort=updated');
     const sel = document.getElementById('repoSelect');
     sel.innerHTML = '<option value="">— select repo —</option>';
-    repos.forEach(r => {
-      const o = document.createElement('option');
-      o.value = r.full_name; o.textContent = r.full_name;
-      sel.appendChild(o);
-    });
+    repos.forEach(r => { const o = document.createElement('option'); o.value = r.full_name; o.textContent = r.full_name; sel.appendChild(o); });
     toast(`${repos.length} repos`);
   } catch(e) { toast('error: ' + e.message, 'err'); }
 }
 
 async function onRepoChange() {
   repo = document.getElementById('repoSelect').value;
-  const bsel = document.getElementById('branchSelect');
+  const bs = document.getElementById('branchSelect');
   document.getElementById('btnLoad').disabled = true;
-  bsel.disabled = true;
-  bsel.innerHTML = '<option>loading…</option>';
+  bs.disabled = true; bs.innerHTML = '<option>loading…</option>';
   if (!repo) return;
   try {
-    const [branches, repoData] = await Promise.all([
-      api(`https://api.github.com/repos/${repo}/branches?per_page=100`),
-      api(`https://api.github.com/repos/${repo}`)
-    ]);
-    bsel.innerHTML = '';
-    branches.forEach(b => {
-      const o = document.createElement('option');
-      o.value = b.name; o.textContent = b.name;
-      if (b.name === repoData.default_branch) o.selected = true;
-      bsel.appendChild(o);
-    });
-    bsel.disabled = false;
-    branch = bsel.value;
+    const [branches, rd] = await Promise.all([api(`https://api.github.com/repos/${repo}/branches?per_page=100`), api(`https://api.github.com/repos/${repo}`)]);
+    bs.innerHTML = '';
+    branches.forEach(b => { const o = document.createElement('option'); o.value = b.name; o.textContent = b.name; if (b.name === rd.default_branch) o.selected = true; bs.appendChild(o); });
+    bs.disabled = false; branch = bs.value;
     document.getElementById('btnLoad').disabled = false;
   } catch(e) { toast('error: ' + e.message, 'err'); }
 }
-
 function onBranchChange() { branch = document.getElementById('branchSelect').value; }
 
+// ── LOAD REPO ──
 async function loadRepo() {
   repo = document.getElementById('repoSelect').value;
   branch = document.getElementById('branchSelect').value;
@@ -417,26 +303,22 @@ async function loadRepo() {
     const ref = await api(`https://api.github.com/repos/${repo}/git/ref/heads/${encodeURIComponent(branch)}`);
     const commit = await api(`https://api.github.com/repos/${repo}/git/commits/${ref.object.sha}`);
     const tree = await api(`https://api.github.com/repos/${repo}/git/trees/${commit.tree.sha}?recursive=1`);
-    const files = tree.tree.filter(t => t.type === 'blob');
-    document.getElementById('fileCount').textContent = files.length;
-    renderTree(files);
-    toast(`${files.length} files`);
+    allFiles = tree.tree.filter(t => t.type === 'blob');
+    document.getElementById('fileCount').textContent = allFiles.length;
+    renderTree(allFiles);
+    toast(`${allFiles.length} files`);
   } catch(e) { toast('error: ' + e.message, 'err'); }
 }
 
-/* ── TREE ── */
+// ── TREE ──
 function buildTree(files) {
   const root = {};
   files.forEach(f => {
     const parts = f.path.split('/');
     let node = root;
     parts.forEach((part, i) => {
-      if (i === parts.length - 1) {
-        node[part] = { _file: true, fullPath: f.path };
-      } else {
-        if (!node[part]) node[part] = { _dir: true, children: {} };
-        node = node[part].children;
-      }
+      if (i === parts.length - 1) { node[part] = { _file: true, fullPath: f.path, sha: f.sha }; }
+      else { if (!node[part]) node[part] = { _dir: true, children: {} }; node = node[part].children; }
     });
   });
   return root;
@@ -445,10 +327,11 @@ function buildTree(files) {
 function renderTree(files) {
   const el = document.getElementById('fileTree');
   el.innerHTML = '';
-  el.appendChild(buildNodes(buildTree(files), 0));
+  if (!files.length) { el.innerHTML = '<div class="tree-empty">no files found</div>'; return; }
+  el.appendChild(buildNodes(buildTree(files), 0, ''));
 }
 
-function buildNodes(node, depth) {
+function buildNodes(node, depth, pathPrefix) {
   const frag = document.createDocumentFragment();
   const sorted = Object.keys(node).sort((a, b) => {
     const ad = !!node[a]._dir, bd = !!node[b]._dir;
@@ -458,80 +341,87 @@ function buildNodes(node, depth) {
     const item = node[key];
     const wrap = document.createElement('div');
     wrap.className = 'tree-node';
-
     const row = document.createElement('div');
     row.className = 'tree-row ' + (item._dir ? 'folder' : 'file');
     row.style.paddingLeft = (10 + depth * 14) + 'px';
 
-    const arrow = document.createElement('span');
-    arrow.className = 'arrow';
-    arrow.textContent = item._dir ? '▶' : '';
+    const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = item._dir ? '▶' : '';
+    const name = document.createElement('span'); name.className = 'name'; name.textContent = key;
+    const acts = document.createElement('div'); acts.className = 'row-actions';
 
-    const name = document.createElement('span');
-    name.className = 'name';
-    name.textContent = key;
+    if (!item._dir) {
+      const fullPath = item.fullPath;
+      // delete btn
+      const delBtn = document.createElement('button');
+      delBtn.className = 'row-act-btn del'; delBtn.textContent = '✕'; delBtn.title = 'Delete';
+      delBtn.onclick = e => { e.stopPropagation(); openDeleteModal(fullPath, item.sha); };
+      acts.appendChild(delBtn);
 
-    row.appendChild(arrow);
-    row.appendChild(name);
-
-    if (item._dir) {
-      const children = document.createElement('div');
-      children.className = 'tree-children';
-      children.appendChild(buildNodes(item.children, depth + 1));
-      row.addEventListener('click', () => {
-        const open = children.classList.toggle('open');
-        row.classList.toggle('open', open);
-      });
+      row.appendChild(arrow); row.appendChild(name); row.appendChild(acts);
+      row.onclick = () => loadFile(fullPath);
+      row.oncontextmenu = e => { e.preventDefault(); showCtxMenu(e, fullPath, item.sha, false); };
       wrap.appendChild(row);
-      wrap.appendChild(children);
     } else {
-      row.addEventListener('click', () => loadFile(item.fullPath));
-      wrap.appendChild(row);
-    }
+      const dirPath = pathPrefix ? pathPrefix + '/' + key : key;
+      // new file in folder btn
+      const addBtn = document.createElement('button');
+      addBtn.className = 'row-act-btn'; addBtn.textContent = '+'; addBtn.title = 'New file here';
+      addBtn.onclick = e => { e.stopPropagation(); openNewItem('file', dirPath + '/'); };
+      acts.appendChild(addBtn);
 
+      row.appendChild(arrow); row.appendChild(name); row.appendChild(acts);
+      const children = document.createElement('div'); children.className = 'tree-children';
+      children.appendChild(buildNodes(item.children, depth + 1, dirPath));
+      row.onclick = () => { const open = children.classList.toggle('open'); row.classList.toggle('open', open); };
+      row.oncontextmenu = e => { e.preventDefault(); showCtxMenu(e, dirPath, null, true); };
+      wrap.appendChild(row); wrap.appendChild(children);
+    }
     frag.appendChild(wrap);
   });
   return frag;
 }
 
-/* ── FILE OPS ── */
+// ── CONTEXT MENU ──
+const ctxMenu = document.getElementById('ctxMenu');
+function showCtxMenu(e, path, sha, isDir) {
+  ctxTarget = { path, sha, isDir };
+  ctxMenu.style.left = e.clientX + 'px';
+  ctxMenu.style.top = e.clientY + 'px';
+  ctxMenu.classList.add('open');
+  document.getElementById('ctxOpen').style.display = isDir ? 'none' : '';
+  document.getElementById('ctxDelete').style.display = isDir ? 'none' : '';
+}
+document.addEventListener('click', () => ctxMenu.classList.remove('open'));
+document.getElementById('ctxOpen').onclick = () => { if (ctxTarget) loadFile(ctxTarget.path); };
+document.getElementById('ctxRename').onclick = () => {
+  if (!ctxTarget) return;
+  const newName = prompt('Rename to (full path):', ctxTarget.path);
+  if (newName && newName !== ctxTarget.path) renameFile(ctxTarget.path, ctxTarget.sha, newName);
+};
+document.getElementById('ctxDelete').onclick = () => { if (ctxTarget) openDeleteModal(ctxTarget.path, ctxTarget.sha); };
+
+// ── LOAD FILE ──
 async function loadFile(path) {
   if (!path) return;
   currentPath = path;
-  document.getElementById('filePath').textContent = path;
-  document.getElementById('filePath').className = 'file-path active';
-  document.getElementById('btnReload').disabled = false;
-  document.getElementById('btnCommit').disabled = false;
+  document.getElementById('filePath').textContent = path; document.getElementById('filePath').className = 'file-path active';
+  document.getElementById('btnReload').disabled = false; document.getElementById('btnCommit').disabled = false; document.getElementById('btnDelete').disabled = false;
   document.querySelectorAll('.tree-row.active').forEach(r => r.classList.remove('active'));
   toast('loading…');
   try {
     const data = await api(`https://api.github.com/repos/${repo}/contents/${path}?ref=${encodeURIComponent(branch)}`);
     currentSha = data.sha;
     const content = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-    showEditor(content);
-    toast('loaded');
+    showEditor(content); toast('loaded');
   } catch(e) { toast('error: ' + e.message, 'err'); }
 }
 
 function showEditor(content) {
   document.getElementById('welcome').style.display = 'none';
-  const ed = document.getElementById('editor');
-  ed.style.display = 'block';
-  ed.value = content;
-  ed.focus();
+  const ed = document.getElementById('editor'); ed.style.display = 'block'; ed.value = content; ed.focus();
 }
 
-function createNewFile() {
-  const p = document.getElementById('newFilePath').value.trim();
-  if (!p) { toast('enter a path', 'err'); return; }
-  closeModal('newFileModal');
-  currentPath = p; currentSha = '';
-  document.getElementById('filePath').textContent = p + ' (new)';
-  document.getElementById('filePath').className = 'file-path active';
-  document.getElementById('btnCommit').disabled = false;
-  showEditor('');
-}
-
+// ── COMMIT ──
 async function commitFile() {
   if (!token) { toast('set token first', 'err'); return; }
   if (!currentPath) { toast('open a file first', 'err'); return; }
@@ -542,8 +432,7 @@ async function commitFile() {
   if (currentSha) body.sha = currentSha;
   try {
     const r = await fetch(`https://api.github.com/repos/${repo}/contents/${currentPath}`, {
-      method: 'PUT',
-      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+      method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
       body: JSON.stringify(body)
     });
     const data = await r.json();
@@ -551,18 +440,172 @@ async function commitFile() {
     currentSha = data.content.sha;
     document.getElementById('commitMsg').value = '';
     toast('committed!');
+    // refresh tree
+    loadRepo();
   } catch(e) { toast('error: ' + e.message, 'err'); }
 }
 
+// ── NEW ITEM ──
+function openNewItem(type, prefill = '') {
+  newItemType = type;
+  const isFolder = type === 'folder';
+  document.getElementById('newItemTitle').textContent = isFolder ? 'New Folder' : 'New File';
+  document.getElementById('newItemDesc').innerHTML = isFolder
+    ? 'Folders in GitHub are created by adding a file inside them. Enter the folder path + a placeholder file, e.g. <code>myfolder/.gitkeep</code>'
+    : 'Enter path from repo root, e.g. <code>src/hello.js</code>';
+  document.getElementById('newItemLabel').textContent = isFolder ? 'Folder/file path' : 'File path';
+  document.getElementById('newItemPath').value = prefill;
+  document.getElementById('newItemPath').placeholder = isFolder ? 'newfolder/.gitkeep' : 'path/to/file.txt';
+  openModal('newItemModal');
+  setTimeout(() => document.getElementById('newItemPath').focus(), 50);
+}
+
+function createItem() {
+  let p = document.getElementById('newItemPath').value.trim();
+  if (!p) { toast('enter a path', 'err'); return; }
+  closeModal('newItemModal');
+  currentPath = p; currentSha = '';
+  document.getElementById('filePath').textContent = p + ' (new)';
+  document.getElementById('filePath').className = 'file-path active';
+  document.getElementById('btnCommit').disabled = false;
+  showEditor(newItemType === 'folder' ? '' : '');
+  toast('new file ready — edit and commit');
+}
+
+// ── DELETE ──
+function confirmDelete() { openDeleteModal(currentPath, currentSha); }
+
+function openDeleteModal(path, sha) {
+  document.getElementById('deleteFileName').textContent = path;
+  document.getElementById('deleteModal').dataset.path = path;
+  document.getElementById('deleteModal').dataset.sha = sha || '';
+  openModal('deleteModal');
+}
+
+async function deleteFile() {
+  const path = document.getElementById('deleteModal').dataset.path;
+  const sha = document.getElementById('deleteModal').dataset.sha;
+  if (!sha) { toast('cannot delete: no SHA (file not from repo?)', 'err'); closeModal('deleteModal'); return; }
+  closeModal('deleteModal');
+  toast('deleting…');
+  try {
+    const r = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+      body: JSON.stringify({ message: `Delete ${path}`, sha, branch })
+    });
+    if (!r.ok) { const e = await r.json(); throw new Error(e.message || r.status); }
+    toast(`deleted ${path}`);
+    if (currentPath === path) {
+      currentPath = ''; currentSha = '';
+      document.getElementById('filePath').textContent = 'no file open';
+      document.getElementById('filePath').className = 'file-path';
+      document.getElementById('editor').style.display = 'none';
+      document.getElementById('welcome').style.display = '';
+      document.getElementById('btnDelete').disabled = true;
+      document.getElementById('btnCommit').disabled = true;
+      document.getElementById('btnReload').disabled = true;
+    }
+    loadRepo();
+  } catch(e) { toast('error: ' + e.message, 'err'); }
+}
+
+// ── RENAME ──
+async function renameFile(oldPath, sha, newPath) {
+  if (!sha) { toast('cannot rename: no SHA', 'err'); return; }
+  toast('renaming…');
+  try {
+    // Read old content
+    const data = await api(`https://api.github.com/repos/${repo}/contents/${oldPath}?ref=${encodeURIComponent(branch)}`);
+    // Create at new path
+    const r1 = await fetch(`https://api.github.com/repos/${repo}/contents/${newPath}`, {
+      method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+      body: JSON.stringify({ message: `Rename ${oldPath} to ${newPath}`, content: data.content.replace(/\n/g, ''), branch })
+    });
+    if (!r1.ok) { const e = await r1.json(); throw new Error(e.message); }
+    // Delete old
+    await fetch(`https://api.github.com/repos/${repo}/contents/${oldPath}`, {
+      method: 'DELETE', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+      body: JSON.stringify({ message: `Remove ${oldPath} after rename`, sha, branch })
+    });
+    toast(`renamed to ${newPath}`);
+    if (currentPath === oldPath) { currentPath = newPath; loadFile(newPath); }
+    else loadRepo();
+  } catch(e) { toast('error: ' + e.message, 'err'); }
+}
+
+// ── UPLOAD ──
+function triggerUpload() {
+  if (!repo) { toast('load a repo first', 'err'); return; }
+  pendingUploadFiles = null;
+  document.getElementById('fileUpload').value = '';
+  document.getElementById('fileUpload').click();
+}
+
+function handleUpload(files) {
+  if (!files || !files.length) return;
+  pendingUploadFiles = files;
+  document.getElementById('uploadPath').value = '';
+  document.getElementById('uploadMsg').value = `Add ${files.length} file(s)`;
+  openModal('uploadModal');
+}
+
+async function doUpload() {
+  const folder = document.getElementById('uploadPath').value.trim();
+  const msg = document.getElementById('uploadMsg').value.trim() || 'Upload files';
+  closeModal('uploadModal');
+  if (!pendingUploadFiles) return;
+  const files = Array.from(pendingUploadFiles);
+  toast(`uploading ${files.length} file(s)…`);
+  let done = 0, errs = 0;
+  for (const file of files) {
+    const filePath = folder ? `${folder.replace(/\/+$/, '')}/${file.name}` : file.name;
+    try {
+      const content = await readFileBase64(file);
+      // Check if exists
+      let existingSha = '';
+      try { const ex = await api(`https://api.github.com/repos/${repo}/contents/${filePath}?ref=${encodeURIComponent(branch)}`); existingSha = ex.sha; } catch {}
+      const body = { message: `${msg}: ${file.name}`, content, branch };
+      if (existingSha) body.sha = existingSha;
+      const r = await fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+        method: 'PUT', headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github+json' },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json(); throw new Error(e.message); }
+      done++;
+    } catch(e) { errs++; console.error(file.name, e.message); }
+  }
+  toast(errs ? `uploaded ${done}, ${errs} failed` : `uploaded ${done} file(s)!`);
+  loadRepo();
+}
+
+function readFileBase64(file) {
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => res(fr.result.split(',')[1]);
+    fr.onerror = rej;
+    fr.readAsDataURL(file);
+  });
+}
+
+// ── DRAG & DROP ──
+const dropHint = document.getElementById('dropHint');
+dropHint.addEventListener('dragover', e => { e.preventDefault(); dropHint.classList.add('dragover'); });
+dropHint.addEventListener('dragleave', () => dropHint.classList.remove('dragover'));
+dropHint.addEventListener('drop', e => {
+  e.preventDefault(); dropHint.classList.remove('dragover');
+  const files = e.dataTransfer.files;
+  if (files.length) handleUpload(files);
+});
+
+// ── TOAST ──
 let _tt;
 function toast(msg, type) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'show' + (type === 'err' ? ' err' : '');
-  clearTimeout(_tt);
-  _tt = setTimeout(() => el.className = '', 2500);
+  el.textContent = msg; el.className = 'show' + (type === 'err' ? ' err' : '');
+  clearTimeout(_tt); _tt = setTimeout(() => el.className = '', 3000);
 }
 
+// ── EDITOR KEYS ──
 document.getElementById('editor').addEventListener('keydown', e => {
   if (e.key === 'Tab') {
     e.preventDefault();
